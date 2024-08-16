@@ -1,16 +1,37 @@
 spring:
   application:
-    name: MiniProjectWithSecurity
-
+    name: MiniProjectBackend
   datasource:
-    url: jdbc:postgresql://localhost:5432/miniproj
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: helo
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-    database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+  threads:
+    virtual:
+      enabled: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: miniproject7976@gmail.com
+    password: xtfxzjtgusyhxpea
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+server:
+  port: 7000
