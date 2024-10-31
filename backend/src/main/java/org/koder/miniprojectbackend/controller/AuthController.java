@@ -8,6 +8,8 @@ import org.koder.miniprojectbackend.entity.AuthenticationResponse;
 import org.koder.miniprojectbackend.entity.User;
 import org.koder.miniprojectbackend.service.JwtService;
 import org.koder.miniprojectbackend.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +28,10 @@ public class AuthController {
     private final UserService userService;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
+    Logger logger = LoggerFactory.getLogger(AuthController.class);
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestParam("file") MultipartFile file, @RequestParam("user") String user,HttpServletResponse response) throws Exception {
+        logger.info(user);
         User savedUser = userService.saveUser(file, user);
         String jwtToken = jwtService.generateToken(savedUser);
         Cookie jwtCookie = new Cookie("token", jwtToken);
@@ -54,5 +57,9 @@ public class AuthController {
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+    @GetMapping("/health")
+    public ResponseEntity<String> healthController(){
+        return ResponseEntity.ok("Hello everything is fine just login");
     }
 }

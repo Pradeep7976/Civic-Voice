@@ -50,7 +50,12 @@ public class UserService implements UserDetailsService {
         if (file == null) {
             throw new GeneralException("No file", null);
         }
-        User user = mapper.readValue(userstr, User.class);
+        User user = null;
+        try {
+            user = mapper.readValue(userstr, User.class);
+        } catch (JsonProcessingException e) {
+            throw new GeneralException("Mapping issue check the user json once",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         String imageUrl="abcd";
 //        String imageUrl = imageKitUtil.uploadFile(file).getUrl();
         user.setImageurl(imageUrl);
