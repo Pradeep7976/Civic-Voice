@@ -1,0 +1,15 @@
+To register a user
+
+curl --location 'http://localhost/api/v1/auth/register' \
+--header 'Content-Type: application/json' \
+--header 'Cookie: token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4NTQ4ODQ4MDUwIiwiaWF0IjoxNzMwMzcxNjUwLCJleHAiOjE3MzAzNzMwOTB9.tMsqEOQ57nJUn1RlhlzMpQuK13texfiPGNDbG5AhLtk' \
+--form 'file=@"/C:/Users/phant/OneDrive/Pictures/Screenshots/Screenshot 2024-03-07 235258.png"' \
+--form 'user="{
+    \"name\":\"pradeep\",
+    \"age\":21,
+    \"phone\":8548848050,
+    \"email\":\"phantompradeep200@gmail.com\",
+    \"address\":\"one\",
+    \"city\":\"tumkur\",
+    \"password\":\"one\"
+}"'
