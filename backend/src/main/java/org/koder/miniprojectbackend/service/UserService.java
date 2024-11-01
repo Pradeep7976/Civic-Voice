@@ -8,6 +8,7 @@ import org.koder.miniprojectbackend.exception.UserFoundException;
 import org.koder.miniprojectbackend.exception.UserNotFoundException;
 import org.koder.miniprojectbackend.repository.UserRatingRepository;
 import org.koder.miniprojectbackend.repository.UserRepository;
+import org.koder.miniprojectbackend.util.Role;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

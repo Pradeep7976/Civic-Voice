@@ -1,11 +1,13 @@
 package org.koder.miniprojectbackend.service;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
+import lombok.extern.java.Log;
 import org.koder.miniprojectbackend.entity.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +21,18 @@ import java.util.function.Function;
 public class JwtService {
     private static final String SECRET_KEY = "XLAMb7Nt/BPEWkcMzQDHRNwe9AjczkYWAiK7Scyl79Hzal08/FUcMS9hOZ26lUVl";
 
+    Logger logger= LoggerFactory.getLogger(JwtService.class);
+
     public String extractUserName(String jwt) {
         return extractClaims(jwt, Claims::getSubject);
     }
 
     public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extactAllClaims(token);
-        return claimsResolver.apply(claims);
+        if(claims!=null)
+            return claimsResolver.apply(claims);
+        else
+            return null;
     }
 
     public String generateToken(User user) {
@@ -42,11 +49,18 @@ public class JwtService {
     }
 
     private Claims extactAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build().
-                parseClaimsJws(token).getBody();
+        Claims claims = null;
+        try {
+            claims = Jwts
+                    .parserBuilder()
+                    .setSigningKey(getSignInKey())
+                    .build().
+                    parseClaimsJws(token).getBody();
+        } catch (Exception e) {
+            logger.error("Error verifying the signature");
+            return null;
+        }
+        return claims;
     }
 
     public boolean isTokenValid(String token, User user) {

@@ -10,6 +10,7 @@ import org.koder.miniprojectbackend.service.JwtService;
 import org.koder.miniprojectbackend.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -45,18 +46,26 @@ public class CookieAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String jwt = authCookie.getValue();
-        String userName = jwtService.extractUserName(jwt);
-        User user = (User) this.userService.loadUserByUsername(userName);
-        if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            if (jwtService.isTokenValid(jwt, user)) {
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        user, null, user.getAuthorities()
-                );
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        String jwt = null;
+        User user = null;
+        try {
+            jwt = authCookie.getValue();
+            String userName = jwtService.extractUserName(jwt);
+            if(userName!=null)
+                user = (User) this.userService.loadUserByUsername(userName);
+            if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                if (jwtService.isTokenValid(jwt, user)) {
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            user, null, user.getAuthorities()
+                    );
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
             }
+            filterChain.doFilter(request, response);
+        } catch (UsernameNotFoundException e) {
+            filterChain.doFilter(request,response);
         }
-        filterChain.doFilter(request, response);
+
     }
 }
