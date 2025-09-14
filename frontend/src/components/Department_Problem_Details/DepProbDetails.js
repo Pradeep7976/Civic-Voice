@@ -17,7 +17,7 @@ import LoadingPage from "../LoadingPage/LoadingPage";
 
 const DepProbDetails = () => {
   const Port = "https://expensive-hem-elk.cyclic.app";
-  const port = "https://expensive-hem-elk.cyclic.app/";
+  const port = "http://localhost:7000/";
 
   let params = useParams();
 
@@ -68,7 +68,7 @@ const DepProbDetails = () => {
         if (result.data != null) setnoofdays(result.data.timeelapsed);
         setload(false);
       });
-  }, [uid, count, noofdays,solvername]);
+  }, [uid, count, noofdays, solvername]);
   return load ? (
     <LoadingPage />
   ) : (

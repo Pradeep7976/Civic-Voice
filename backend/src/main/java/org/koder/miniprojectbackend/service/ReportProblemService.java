@@ -50,6 +50,7 @@ public class ReportProblemService {
         }
         try {
             ProblemReq problemReq = mapper.readValue(reportProblemReqStr, ProblemReq.class);
+            problemReq.setDate(new Date());
             logger.info(String.format("problem received with uid %s", problemReq.getUid()));
             if (!isProblemReported(problemReq.getLng(), problemReq.getLat())) {
                 logger.info(String.format("problem already exists"));

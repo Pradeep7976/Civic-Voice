@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Point;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "reported_problems")

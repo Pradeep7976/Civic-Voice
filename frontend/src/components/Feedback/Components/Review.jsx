@@ -40,7 +40,7 @@ function Rating({ rating, numReviews }) {
 function TestimonialCard(props) {
   const [name, setname] = useState("");
   const [user, setuser] = useState("");
-  const Port = "https://expensive-hem-elk.cyclic.app/";
+  const Port = "http://localhost:7000/";
   useEffect(() => {
     axios
       .get(Port + "/api/user/details/" + props.uid.toString())
@@ -49,9 +49,6 @@ function TestimonialCard(props) {
       });
   }, [user]);
   return (
-
-    
-    
     <Flex
       boxShadow={"lg"}
       direction={{ base: "column-reverse", md: "row" }}
@@ -60,12 +57,12 @@ function TestimonialCard(props) {
       p={10}
       justifyContent={"space-between"}
       position={"relative"}
-      bgGradient='linear(to-b, blue.400, blue.600)'
+      bgGradient="linear(to-b, blue.400, blue.600)"
       borderColor={"red"}
       borderStyle={"solid"}
-      mt='5'
-      ml='1'
-      mr='1'
+      mt="5"
+      ml="1"
+      mr="1"
     >
       <Flex direction={"column"} textAlign={"left"}>
         <chakra.p
@@ -78,17 +75,23 @@ function TestimonialCard(props) {
           {/* {user} */}
           {name}
         </chakra.p>
-        <chakra.p  fontFamily={"Work Sans"} fontWeight={"bold"} fontSize={14}>
-          <Text fontSize="xl" color='white' fontFamily={"Almarai"} fontWeight={"300"}>
+        <chakra.p fontFamily={"Work Sans"} fontWeight={"bold"} fontSize={14}>
+          <Text
+            fontSize="xl"
+            color="white"
+            fontFamily={"Almarai"}
+            fontWeight={"300"}
+          >
             {props.feedback}
           </Text>
         </chakra.p>
         <br />
-        <Text fontSize="xl" color='white' paddingBottom={1}>ratings given</Text>
+        <Text fontSize="xl" color="white" paddingBottom={1}>
+          ratings given
+        </Text>
         <Rating rating={parseFloat(props.rating)} />
       </Flex>
     </Flex>
-   
   );
 }
 export default TestimonialCard;

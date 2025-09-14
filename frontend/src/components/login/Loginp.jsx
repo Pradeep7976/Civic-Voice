@@ -25,9 +25,9 @@ function Loginp() {
   const [load, setload] = useState(false);
 
   // eslint-disable-next-line
-  const port = "https://expensive-hem-elk.cyclic.app/";
+  const port = "http://localhost:7000/";
   // eslint-disable-next-line
-  const Port = "https://expensive-hem-elk.cyclic.app/";
+  const Port = "http://localhost:7000";
 
   let navigate = useNavigate();
   function regestr() {
@@ -41,9 +41,11 @@ function Loginp() {
     };
     console.log(dat);
     axios
-      .post(Port + "/api/user/login", dat)
+      .post(Port + "/api/v1/auth/login", dat)
       .then((res) => {
-        if (res.data.auth) {
+        console.log(res);
+
+        if (res.data.token != null) {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("uid", res.data.uid);
           navigate("/");

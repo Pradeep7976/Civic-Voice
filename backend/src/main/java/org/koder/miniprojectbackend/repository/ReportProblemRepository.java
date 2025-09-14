@@ -10,15 +10,20 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ReportProblemRepository extends JpaRepository<ReportProblem, Long> {
-    List<ReportProblem>findAllByDepartment(String department);
-    List<ReportProblem>findAllByUid(long uid);
-    List<ReportProblem>findAllByStatus(boolean status);
+    List<ReportProblem> findAllByDepartment(String department);
+
+    List<ReportProblem> findAllByUid(long uid);
+
+    List<ReportProblem> findAllByStatus(boolean status);
 
     @Query(value = "Select * from reported_problems where ST_DistanceSphere(point,:point)< :distanceM", nativeQuery = true)
-    List<ReportProblem>findAnyProblemWithinDistanceFromPoint(Point point,float distanceM);
+    List<ReportProblem> findAnyProblemWithinDistanceFromPoint(Point point, float distanceM);
 
     @Modifying
     @Transactional
     @Query(value = "UPDATE reported_problems SET status=:status WHERE pid=:pid", nativeQuery = true)
-    void updateStatusOfProblem(Long pid,Boolean status);
+    void updateStatusOfProblem(Long pid, Boolean status);
+
+    @Query(value = "SELECT count(*) from reported_problems where uid=:uid", nativeQuery = true)
+    long findCountByUid(long uid);
 }

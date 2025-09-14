@@ -7,35 +7,35 @@ import { useNavigate } from "react-router-dom";
 import LoadingPage from "../LoadingPage/LoadingPage";
 function Home() {
   // eslint-disable-next-line
-  const port = "https://expensive-hem-elk.cyclic.app/";
+  const port = "http://localhost:7000/";
   // eslint-disable-next-line
-  const Port = "https://expensive-hem-elk.cyclic.app/";
-  const [details, setdetails] = useState({});
-  const [url, seturl] = useState("");
-  const [load, setload] = useState(true);
+  const [details, setDetails] = useState({});
+  const [url, setUrl] = useState("");
+  const [load, setLoad] = useState(true);
   let navigate = useNavigate();
-  useEffect(() => {
-    axios
-      .get(Port + "/api/user/isUserAuth", {
-        headers: { "x-access-token": localStorage.getItem("token") },
-      })
-      .then((response) => {
-        if (!response.data.auth) {
-          navigate("/login");
-          // setload(response.data.auth);
-        } else {
-          setload(false);
-        }
-      });
-    axios
-      .post(Port + "/api/user/details", {
-        uid: localStorage.getItem("uid"),
-      })
-      .then((response) => {
-        setdetails(response.data);
-        seturl(response.data.imageurl);
-      });
-  }, []);
+    useEffect(() => {
+      const uid=localStorage.getItem("uid");
+    const checkAuth = async () => {
+      try {
+        const apiPath = `${port}api/v1/user/${uid}`;
+        const res = await axios.get(apiPath, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          },
+        });
+
+        setDetails(res.data);
+        setUrl(res.data.imageurl || "");
+        setLoad(false);
+      } catch (err) {
+        console.error("Auth check failed:", err);
+        navigate("/login");
+      }
+    };
+
+    checkAuth();
+  }, [navigate]);
+
   return load ? (
     <LoadingPage />
   ) : (

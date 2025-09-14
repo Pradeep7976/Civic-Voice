@@ -4,6 +4,7 @@ import org.koder.miniprojectbackend.entity.ReportProblem;
 import org.koder.miniprojectbackend.exception.DuplicateProblemException;
 import org.koder.miniprojectbackend.service.ReportProblemService;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,7 @@ public class ReportProblemController {
     }
 
     @PostMapping
+    @Transactional
     public ReportProblem saveProblem(@RequestParam("file") MultipartFile file, @RequestParam("problem") String problem) {
         ReportProblem reportProblem = reportProblemService.saveReportedProblem(file, problem);
         if (reportProblem == null)

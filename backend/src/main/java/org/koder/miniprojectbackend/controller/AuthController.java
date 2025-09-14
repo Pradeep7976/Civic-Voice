@@ -19,6 +19,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -43,7 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
+    public ResponseEntity<Map<String,String>> login(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getPhone(), request.getPassword()));
         try {
             User user = (User) userService.loadUserByUsername(request.getPhone());
@@ -53,7 +56,10 @@ public class AuthController {
             jwtCookie.setMaxAge(24 * 60 * 60);
             jwtCookie.setPath("/");
             response.addCookie(jwtCookie);
-            return ResponseEntity.ok(AuthenticationResponse.builder().token(jwtToken).build());
+            Map<String,String> map = new HashMap<>();
+            map.put("token", jwtToken);
+            map.put("uid", String.valueOf(user.getUid()));
+            return ResponseEntity.ok(map);
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

@@ -6,6 +6,7 @@ import org.koder.miniprojectbackend.entity.*;
 import org.koder.miniprojectbackend.exception.GeneralException;
 import org.koder.miniprojectbackend.exception.UserFoundException;
 import org.koder.miniprojectbackend.exception.UserNotFoundException;
+import org.koder.miniprojectbackend.repository.ReportProblemRepository;
 import org.koder.miniprojectbackend.repository.UserRatingRepository;
 import org.koder.miniprojectbackend.repository.UserRepository;
 import org.koder.miniprojectbackend.util.Role;
@@ -43,6 +44,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    ReportProblemRepository reportProblemRepository;
 
     @Autowired
     JwtService jwtService;
@@ -106,5 +110,10 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByPhone(username);
+    }
+
+    public long getReportedCount(Long uid) {
+        long count=reportProblemRepository.findCountByUid(uid);
+        return count;
     }
 }

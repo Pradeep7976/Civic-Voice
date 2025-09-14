@@ -30,8 +30,8 @@ const reported_problems = Problems;
 //
 
 const R_Problems = (props) => {
-  const Port = "https://expensive-hem-elk.cyclic.app/";
-  const port = "https://expensive-hem-elk.cyclic.app/";
+  const Port = "http://localhost:7000/";
+  const port = "http://localhost:7000/";
   const [problems, setproblems] = useState([]);
   const [name, setname] = useState("");
   const [load, setload] = useState(true);

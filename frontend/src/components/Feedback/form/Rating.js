@@ -29,9 +29,9 @@ const Edit_Profile = () => {
   const [rating, setRating] = useState(0.0);
   const [feedback, setFeedback] = useState("");
   // eslint-disable-next-line
-  const port = "https://expensive-hem-elk.cyclic.app/";
+  const port = "http://localhost:7000/";
   // eslint-disable-next-line
-  const Port = "https://expensive-hem-elk.cyclic.app/";
+  const Port = "http://localhost:7000/";
   let navigate = useNavigate();
   function submit() {
     if (rating > 5 || rating < 0) {
@@ -67,7 +67,11 @@ const Edit_Profile = () => {
     <LoadingPage />
   ) : (
     <>
-      <Card margin="5" bgGradient='linear(to-b, blue.400, blue.600)' borderRadius={10}>
+      <Card
+        margin="5"
+        bgGradient="linear(to-b, blue.400, blue.600)"
+        borderRadius={10}
+      >
         <Tabs mt="5" padding="auto" variant="soft-rounded" colorScheme="green">
           <TabList justifyContent={"center"}>
             <Tab color="white">Feedback</Tab>
@@ -101,7 +105,7 @@ const Edit_Profile = () => {
                     />
                   </InputGroup>
 
-                  <Button mt='5' colorScheme="green" onClick={submit}>
+                  <Button mt="5" colorScheme="green" onClick={submit}>
                     Submit
                   </Button>
                 </CardBody>
