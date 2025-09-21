@@ -49,8 +49,9 @@ public class AppConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
     @Bean
-    public ModelMapper modelMapper(){
+    public ModelMapper modelMapper() {
         return new ModelMapper();
     }
 
@@ -60,9 +61,9 @@ public class AppConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:3000")
-                        .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
-                        .allowedHeaders("Content-Type","Authorization");
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("Content-Type", "Authorization");
             }
         };
     }

@@ -24,17 +24,19 @@ public class ReportProblemController {
 
     @PostMapping
     @Transactional
-    public ReportProblem saveProblem(@RequestParam("file") MultipartFile file, @RequestParam("problem") String problem) {
+    public Map<String, String> saveProblem(@RequestParam("file") MultipartFile file, @RequestParam("problem") String problem) {
         ReportProblem reportProblem = reportProblemService.saveReportedProblem(file, problem);
         if (reportProblem == null)
             throw new DuplicateProblemException("Problem Already Reported", HttpStatus.CONFLICT);
         reportProblem.setPoint(null);
-        return reportProblem;
+        return Map.of("done", "true");
     }
+
     @GetMapping
-    public List<ReportProblem>getAllReportedProblems(){
+    public List<ReportProblem> getAllReportedProblems() {
         return reportProblemService.getAllReportedProblems();
     }
+
     @GetMapping("/count/total")
     public Map<String, Long> getReportedProblemsCount() {
         Map<String, Long> mp = new HashMap<>();
@@ -42,6 +44,7 @@ public class ReportProblemController {
         mp.put("count", count);
         return mp;
     }
+
     @GetMapping("/count/solved")
     public Map<String, Long> getSolvedProblemsCount() {
         Map<String, Long> mp = new HashMap<>();
@@ -49,16 +52,29 @@ public class ReportProblemController {
         mp.put("count", count);
         return mp;
     }
-    @GetMapping("/{pid}")
-    public ReportProblem getReportedProblemByPid(@PathVariable("pid") Long pid){
-        return reportProblemService.getReportProblemById(pid);
-    }
-    @GetMapping("/problems/{dept}")
-    public List<ReportProblem> getReportedProblemsOfDepartment(@PathVariable("dept") String department){
+
+    //    @GetMapping("/{pid}")
+//    public ReportProblem getReportedProblemByPid(@PathVariable("pid") Long pid){
+//        return reportProblemService.getReportProblemById(pid);
+//    }
+    @GetMapping("/{dept}")
+    public List<ReportProblem> getReportedProblemsOfDepartment(@PathVariable("dept") String department) {
         return reportProblemService.getReportedProblemsOfDepartment(department);
     }
+
     @PutMapping("/status/{pid}")
-    public Boolean updateStatusOfReportedProblem(@PathVariable("pid")Long pid){
+    public Boolean updateStatusOfReportedProblem(@PathVariable("pid") Long pid) {
         return reportProblemService.updateStatusOfReportedProblem(pid);
+    }
+
+    @GetMapping("/details/{pid}")
+    public ReportProblem getDetailsOfProblem(@PathVariable("pid") Long pid) {
+        return reportProblemService.getReportProblemById(pid);
+    }
+
+    @GetMapping("/timeelapsed/{pid}")
+    public Map<String, String> getTimeElapsed(@PathVariable("pid") Long pid) {
+        Long days = reportProblemService.getTimeElapsedOfReportProblem(pid);
+        return Map.of("timeelapsed", days.toString());
     }
 }

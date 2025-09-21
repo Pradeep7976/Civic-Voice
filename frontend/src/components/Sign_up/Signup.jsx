@@ -38,7 +38,7 @@ const Edit_Profile = () => {
   // eslint-disable-next-line
   const port = "http://localhost:7000/";
   // eslint-disable-next-line
-  const Port = "http://localhost:7000/";
+  const Port = "http://api:7000/";
   let navigate = useNavigate();
 
   function handleFileChange(event) {

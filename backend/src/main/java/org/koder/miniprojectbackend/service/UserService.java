@@ -59,9 +59,9 @@ public class UserService implements UserDetailsService {
         try {
             user = mapper.readValue(userstr, User.class);
         } catch (JsonProcessingException e) {
-            throw new GeneralException("Mapping issue check the user json once",HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new GeneralException("Mapping issue check the user json once", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        String imageUrl="abcd";
+        String imageUrl = "abcd";
 //        String imageUrl = imageKitUtil.uploadFile(file).getUrl();
         user.setImageurl(imageUrl);
         user.setNonLocked(true);
@@ -103,6 +103,7 @@ public class UserService implements UserDetailsService {
             throw e;
         }
     }
+
     public UserDTO toDto(User user) {
         return modelMapper.map(user, UserDTO.class);
     }
@@ -113,7 +114,14 @@ public class UserService implements UserDetailsService {
     }
 
     public long getReportedCount(Long uid) {
-        long count=reportProblemRepository.findCountByUid(uid);
+        long count = reportProblemRepository.findCountByUid(uid);
         return count;
+    }
+
+    public String getUserNameFromUid(Long uid) {
+        User user = userRepository.findByUid(uid);
+        if (user == null)
+            throw new UserFoundException(String.valueOf(uid));
+        return user.getName();
     }
 }

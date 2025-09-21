@@ -21,6 +21,7 @@ import org.koder.miniprojectbackend.util.imageKitUtil;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class ReportProblemService {
     public ReportProblemService(@Lazy mailService mailService) {
         this.mailService = mailService;
     }
+
     Logger logger = LoggerFactory.getLogger(ReportProblemService.class);
 
     @Transactional
@@ -61,7 +63,7 @@ public class ReportProblemService {
             Point point = geometryFactory.createPoint(new Coordinate(problemReq.getLng(), problemReq.getLat()));
             ReportProblem reportProblem = ReportProblem.builder().uid(problemReq.getUid()).description(problemReq.getDescription()).date(problemReq.getDate()).imageUrl(imageUrl).status(false).department(problemReq.getDepartment()).point(point).build();
             ReportProblem savedProblem = reportProblemRepository.save(reportProblem);
-            mailService.sendEmailOnProblemReported(savedProblem.getPid(),problemReq.getUid());
+            mailService.sendEmailOnProblemReported(savedProblem.getPid(), problemReq.getUid());
             return savedProblem;
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +83,7 @@ public class ReportProblemService {
     }
 
     public List<ReportProblem> getReportedProblemsOfDepartment(String department) {
-        return reportProblemRepository.findAllByDepartment(department);
+        return reportProblemRepository.findAllByDepartment(department).stream().sorted(Comparator.comparing(ReportProblem::getDate)).toList();
     }
 
     public ReportProblem getReportProblemById(Long id) {
@@ -100,8 +102,9 @@ public class ReportProblemService {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
             return ChronoUnit.DAYS.between(dateLocal, LocalDate.now());
+        } else {
+            throw new GeneralException("Problem not found", null);
         }
-        return null;
     }
 
     public Long reportedProblemsCount() {
@@ -111,8 +114,20 @@ public class ReportProblemService {
     public Long solvedReportedProblemsCount() {
         return reportProblemRepository.findAllByStatus(true).stream().count();
     }
-    public Boolean updateStatusOfReportedProblem(Long pid){
-         reportProblemRepository.updateStatusOfProblem(pid,true);
-         return true;
+
+    public Boolean updateStatusOfReportedProblem(Long pid) {
+        reportProblemRepository.updateStatusOfProblem(pid, true);
+        return true;
+    }
+
+    public Long timeElapsed(Long pid) {
+        Date date = null;
+        ReportProblem reportProblem = getReportProblemById(pid);
+        if (reportProblem != null) {
+            date = reportProblem.getDate();
+        }
+        LocalDate today = LocalDate.now();
+        LocalDate reportedDate = LocalDate.parse(date.toString());
+        return ChronoUnit.DAYS.between(reportedDate, today);
     }
 }

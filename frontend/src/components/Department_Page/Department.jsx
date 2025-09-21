@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import api from "../requestClient/axiosInstance";
 
 const Department = () => {
   // localStorage.setItem("did", 4);
@@ -16,27 +17,12 @@ const Department = () => {
   let navigate = useNavigate();
   useEffect(() => {
     console.log("I AM USE EFFECT");
-    axios
-      .get(Port + "/api/dept/isUserAuth", {
-        headers: { "x-access-token": localStorage.getItem("tokendept") },
-      })
-      .then((response) => {
-        if (!response.data.auth) {
-          navigate("/dept/login");
-          // setload(response.data.auth);
-        } else {
-          // setload(true);
-        }
-      });
-    axios
-      .post(Port + "/api/dept/getdeptname", {
-        did: localStorage.getItem("did"),
-      })
-      .then((result) => {
-        console.log(result.data);
-        setname(result.data);
-        setload(false);
-      });
+    const did = localStorage.getItem("uid");
+    api.get("/dept/getdeptname/" + did).then((result) => {
+      console.log(result.data);
+      setname(result.data);
+      setload(false);
+    });
   }, [Name]);
   return load ? (
     <LoadingPage />

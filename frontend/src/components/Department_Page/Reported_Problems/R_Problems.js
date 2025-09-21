@@ -22,6 +22,7 @@ import "./R_Problems.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "../../LoadingPage/LoadingPage";
+import api from "../../requestClient/axiosInstance";
 
 const reported_problems = Problems;
 //
@@ -32,7 +33,7 @@ const reported_problems = Problems;
 //
 
 const R_Problems = (props) => {
-  const Port = "https://expensive-hem-elk.cyclic.app";
+  // const Port = "https://expensive-hem-elk.cyclic.app";
   const port = "http://localhost:7000/";
   const [problems, setproblems] = useState([]);
   const [name, setname] = useState("");
@@ -53,12 +54,12 @@ const R_Problems = (props) => {
       pid: pid,
       name: solvername,
     };
-    axios.post(Port + "/api/reportprob/solvername", solver).then((resp) => {
+    api.post("/reportprob/solvername", solver).then((resp) => {
       console.log("SOLVER NAME DONE");
     });
     console.log("SOlved");
     console.log("FUNCPID IS " + pid.toString());
-    axios.get(Port + "/api/dept/solve/" + pid.toString()).then((result) => {
+    api.get("/dept/solve/" + pid.toString()).then((result) => {
       console.log(result);
       window.location.reload();
     });
@@ -67,23 +68,21 @@ const R_Problems = (props) => {
   }
   function flag(pid) {
     console.log(pid);
-    axios.post(Port + "/api/dept/flag", { pid: pid }).then((result) => {
+    api.post("/dept/flag", { pid: pid }).then((result) => {
       console.log(result);
       window.location.reload();
     });
   }
   useEffect(() => {
-    axios
-      .post(Port + "/api/dept/getdeptname", {
-        did: localStorage.getItem("did"),
-      })
+    api
+      .get("/dept/getdeptname/" + localStorage.getItem("uid"))
       .then((result) => {
         console.log(result.data);
         setname(result.data);
       });
     // axios.get(port + "/api/dept/probs/" + name).then((response) => {
-    axios
-      .get(Port + "/api/reportprob/problems/" + name)
+    api
+      .get("/problem/" + name)
       .then((response) => {
         if (response.data.length == 0) {
           alert("Congrats no problems");

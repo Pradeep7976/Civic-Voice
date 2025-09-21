@@ -18,6 +18,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import deptMapping from "./deptMapping";
+import api from "../requestClient/axiosInstance";
 
 function Loginp() {
   const [passwordd, setpassword] = useState("");
@@ -29,7 +31,7 @@ function Loginp() {
   // eslint-disable-next-line
   const port = "http://localhost:7000/";
   // eslint-disable-next-line
-  const Port = "http://localhost:7000/";
+  const Port = "http://localhost:7000";
 
   let navigate = useNavigate();
   function regestr() {
@@ -38,25 +40,24 @@ function Loginp() {
   function clicki() {
     setload(true);
     const dat = {
-      depart: depart,
+      phone: deptMapping[depart],
       password: passwordd,
     };
     console.log(dat);
-    axios
-      .post(Port + "/api/v1/auth/login", dat)
+    api
+      .post("/auth/login", dat)
       .then((res) => {
         console.log(res);
-
         if (res.data.token != null) {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("uid", res.data.uid);
-          navigate("/");
+          navigate("/dept/" + res.data.uid);
         }
       })
       .catch((err) => {
         alert("alert INVALID Password or phone" + err);
         setload(false);
-        navigate("/login");
+        navigate("/dept/login");
       });
   }
   return load ? (
