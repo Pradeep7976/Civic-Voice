@@ -23,7 +23,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import exifr from "exifr";
 import { Popup } from "react-map-gl";
 import LoadingPage from "../LoadingPage/LoadingPage";
-import './Pdetails.css'
+import "./Pdetails.css";
+import api from "../requestClient/axiosInstance";
 
 const Pdetails = () => {
   let navigate = useNavigate();
@@ -36,9 +37,9 @@ const Pdetails = () => {
     localStorage.getItem("department")
   );
   // eslint-disable-next-line
-  const port = "https://expensive-hem-elk.cyclic.app/";
+  const port = "http://localhost:7000/";
   // eslint-disable-next-line
-  const Port = "https://expensive-hem-elk.cyclic.app/";
+  const Port = "http://localhost:7000/";
   const [description, setdescription] = useState("");
   const [longitude, setlongitude] = useState(0.0);
   const [latitude, setlatitude] = useState(0.0);
@@ -48,14 +49,14 @@ const Pdetails = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [desc, setdesc] = useState("");
   ///////////////////                 IMAGE                  //////////////////////////////////////
-  async function handleSubmit(event) {
-    console.log("sdfsdf");
-    event.preventDefault();
-    const formData = new FormData();
-    formData.append("file", file);
-    const response = await axios.post(Port + "/upload", formData);
-    setImageUrl(response.data.url);
-  }
+  // async function handleSubmit(event) {
+  //   console.log("sdfsdf");
+  //   event.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   const response = await axios.post(Port + "/upload", formData);
+  //   setImageUrl(response.data.url);
+  // }
 
   async function handleFileChange(event) {
     const selectedfile = event.target.files[0];
@@ -102,13 +103,13 @@ const Pdetails = () => {
       return;
     }
     console.log(dat);
-    formData.append("data", JSON.stringify(dat));
+    formData.append("problem", JSON.stringify(dat));
     setload(true);
-    const response = await axios
-      .post(Port + "/api/reportprob/temp", formData, {
+    const response = await api
+      .post("/problem", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-        }, // set the content type to multipart form data
+        },
       })
       .then((resp) => {
         console.log(resp.data);
@@ -120,18 +121,18 @@ const Pdetails = () => {
       });
   }
   useEffect(() => {
-    axios
-      .get(Port + "/api/user/isUserAuth", {
-        headers: { "x-access-token": localStorage.getItem("token") },
-      })
-      .then((response) => {
-        if (!response.data.auth) {
-          navigate("/login");
-          // setload(response.data.auth);
-        } else {
-          // setload(true);
-        }
-      });
+    // axios
+    //   .get(Port + "/api/user/isUserAuth", {
+    //     headers: { "x-access-token": localStorage.getItem("token") },
+    //   })
+    //   .then((response) => {
+    //     if (!response.data.auth) {
+    //       navigate("/login");
+    //       // setload(response.data.auth);
+    //     } else {
+    //       // setload(true);
+    //     }
+    //   });
   }, []);
   function PopUp() {
     return (
@@ -140,12 +141,12 @@ const Pdetails = () => {
           className="popup-content"
           style={{ backgroundColor: "rgb(33, 150, 243)" }}
         >
-          <h2 style={{color:'white'}}>Confirm Selection</h2>
-          <p style={{color:'white'}}>GPS co-ordinates found in the image </p>
-          <p style={{color:'white'}}>Do u want to use it? </p>
-          <div style={{color:'white'}} className="popup-buttons">
-            <button 
-            style={{backgroundColor:'black',borderRadius:'8px'}}
+          <h2 style={{ color: "white" }}>Confirm Selection</h2>
+          <p style={{ color: "white" }}>GPS co-ordinates found in the image </p>
+          <p style={{ color: "white" }}>Do u want to use it? </p>
+          <div style={{ color: "white" }} className="popup-buttons">
+            <button
+              style={{ backgroundColor: "black", borderRadius: "8px" }}
               onClick={() => {
                 setmapshow(false);
                 setShowPopup(false);
@@ -153,8 +154,8 @@ const Pdetails = () => {
             >
               Yes
             </button>
-            <button 
-            style={{backgroundColor:'black',borderRadius:'8px'}}
+            <button
+              style={{ backgroundColor: "black", borderRadius: "8px" }}
               onClick={() => {
                 setShowPopup(false);
               }}
@@ -231,16 +232,16 @@ const Pdetails = () => {
                 />
               )}
             </Text>
-          
+
             <Input
               type="file"
-              pt='1'
+              pt="1"
               name="image"
               accept="image/*"
-              bg={'blue.400'}
+              bg={"blue.400"}
               onChange={handleFileChange}
             ></Input>
-           
+
             <Center
               className="pointer"
               boxShadow="dark-lg"

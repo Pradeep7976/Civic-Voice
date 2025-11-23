@@ -14,10 +14,11 @@ import { ChevronLeftIcon, InfoIcon } from "@chakra-ui/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import api from "../requestClient/axiosInstance";
 
 const DepProbDetails = () => {
-  const Port = "https://expensive-hem-elk.cyclic.app";
-  const port = "https://expensive-hem-elk.cyclic.app/";
+  // const Port = "https://expensive-hem-elk.cyclic.app";
+  const port = "http://localhost:7000/";
 
   let params = useParams();
 
@@ -33,42 +34,36 @@ const DepProbDetails = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(Port + "/api/reportprob/details/" + pid)
+    api
+      .get("/problem/details/" + pid)
       .then((result) => {
         setproblem(result.data);
         setuid(result.data.uid);
-        console.log(result.data);
+        console.log(result.data.uid);
         if (result.data.status) {
-          axios
-            .get(Port + "api/reportprob/solvername/" + problem.pid)
-            .then((resp) => {
-              setsolvername(resp.data.name);
-            });
+          api.get("/reportprob/solvername/" + problem.pid).then((resp) => {
+            setsolvername(resp.data.name);
+          });
         }
       })
       .catch((e) => {
         console.log(e);
         // alert(e);
       });
-    axios.post(Port + "/api/user/details", { uid: uid }).then((result) => {
+    api.get("/user/" + uid.toString()).then((result) => {
       setuserdetails(result.data);
       console.log(result.data);
     });
-    axios
-      .get(Port + "/api/reportprob/probcount/" + uid.toString())
-      .then((result) => {
-        setcount(result.data.count);
-        console.log(result.data.count);
-      });
-    axios
-      .get(Port + "/api/reportprob/reported/" + pid.toString())
-      .then((result) => {
-        console.log(result);
-        if (result.data != null) setnoofdays(result.data.timeelapsed);
-        setload(false);
-      });
-  }, [uid, count, noofdays,solvername]);
+    api.get("/user/reported/count/" + uid.toString()).then((result) => {
+      setcount(result.data.count);
+      console.log(result.data.count);
+    });
+    api.get("/problem/timeelapsed/" + pid.toString()).then((result) => {
+      console.log(result);
+      if (result.data != null) setnoofdays(result.data.timeelapsed);
+      setload(false);
+    });
+  }, [uid, count, noofdays, solvername]);
   return load ? (
     <LoadingPage />
   ) : (

@@ -8,7 +8,7 @@ import { Card } from "@chakra-ui/react";
 
 export default function Docc(props) {
   let navigate = useNavigate();
-  const Port = "https://expensive-hem-elk.cyclic.app/";
+  const Port = "http://localhost:7000/";
   const [reviews, setreviews] = useState([]);
   function routeChange() {
     let path = "/details/" + props.prescid;
@@ -25,14 +25,12 @@ export default function Docc(props) {
     <div>
       {reviews.map((dat) => {
         return (
-          
           <Review
-            bg='black'
+            bg="black"
             uid={dat.uid}
             rating={dat.rating.toString()}
             feedback={dat.feedback}
           />
-          
         );
       })}
     </div>

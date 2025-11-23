@@ -6,6 +6,7 @@ import org.koder.miniprojectbackend.entity.*;
 import org.koder.miniprojectbackend.exception.GeneralException;
 import org.koder.miniprojectbackend.exception.UserFoundException;
 import org.koder.miniprojectbackend.exception.UserNotFoundException;
+import org.koder.miniprojectbackend.repository.ReportProblemRepository;
 import org.koder.miniprojectbackend.repository.UserRatingRepository;
 import org.koder.miniprojectbackend.repository.UserRepository;
 import org.koder.miniprojectbackend.util.Role;
@@ -45,6 +46,9 @@ public class UserService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
+    ReportProblemRepository reportProblemRepository;
+
+    @Autowired
     JwtService jwtService;
 
     public User saveUser(MultipartFile file, String userstr) throws Exception {
@@ -55,9 +59,9 @@ public class UserService implements UserDetailsService {
         try {
             user = mapper.readValue(userstr, User.class);
         } catch (JsonProcessingException e) {
-            throw new GeneralException("Mapping issue check the user json once",HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new GeneralException("Mapping issue check the user json once", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        String imageUrl="abcd";
+        String imageUrl = "abcd";
 //        String imageUrl = imageKitUtil.uploadFile(file).getUrl();
         user.setImageurl(imageUrl);
         user.setNonLocked(true);
@@ -99,6 +103,7 @@ public class UserService implements UserDetailsService {
             throw e;
         }
     }
+
     public UserDTO toDto(User user) {
         return modelMapper.map(user, UserDTO.class);
     }
@@ -106,5 +111,17 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByPhone(username);
+    }
+
+    public long getReportedCount(Long uid) {
+        long count = reportProblemRepository.findCountByUid(uid);
+        return count;
+    }
+
+    public String getUserNameFromUid(Long uid) {
+        User user = userRepository.findByUid(uid);
+        if (user == null)
+            throw new UserFoundException(String.valueOf(uid));
+        return user.getName();
     }
 }

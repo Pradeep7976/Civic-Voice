@@ -24,42 +24,26 @@ import { ChevronLeftIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import api from "../requestClient/axiosInstance";
 
 const Edit_Profile = () => {
-  const port = "https://expensive-hem-elk.cyclic.app/";
-  const Port = "https://expensive-hem-elk.cyclic.app/";
   const [details, setdetails] = useState({});
   const [count, setcount] = useState(0);
   const [load, setload] = useState(true);
   let navigate = useNavigate();
   useEffect(() => {
-    axios
-      .get(Port + "/api/user/isUserAuth", {
-        headers: { "x-access-token": localStorage.getItem("token") },
-      })
-      .then((response) => {
-        if (!response.data.auth) {
-          navigate("/login");
-          // setload(response.data.auth);
-        } else {
-          // setload(true);
-        }
-      });
-    axios
-      .post(Port + "/api/user/details", {
-        uid: localStorage.getItem("uid"),
-      })
+    const uid = localStorage.getItem("uid");
+    api
+      .get(`/user/${uid}`)
       .then((response) => {
         console.log(response.data);
         setdetails(response.data);
         setload(false);
       });
-    axios
-      .post(Port + "/api/user/reported/count", {
-        uid: localStorage.getItem("uid"),
-      })
+    api
+      .get(`/user/reported/count/${uid}`)
       .then((response) => {
-        setcount(response.data.ans);
+        setcount(response.data.count);
       });
   }, []);
   return load ? (
@@ -91,7 +75,8 @@ const Edit_Profile = () => {
                     {details.name}
                   </Text>
                   <Text mb="3" fontSize="xl">
-                    <strong>Age : </strong>{details.age}
+                    <strong>Age : </strong>
+                    {details.age}
                   </Text>
                   <Text mb="3" fontSize="xl">
                     <strong>Phone : </strong>
@@ -101,9 +86,10 @@ const Edit_Profile = () => {
                     <strong>Email : </strong>
                     {details.email}
                   </Text>
-                  
+
                   <Text mb="3" fontSize="xl">
-                    <strong>City : </strong>{details.city}
+                    <strong>City : </strong>
+                    {details.city}
                   </Text>
 
                   <Text color="green" fontSize={"xl"}>

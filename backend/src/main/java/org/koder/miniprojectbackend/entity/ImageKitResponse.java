@@ -17,6 +17,7 @@ public class ImageKitResponse {
     public String thumbnailUrl;
     @JsonProperty("AITags")
     public Object aITags;
+    public String description;
 
     public class VersionInfo {
         public String id;

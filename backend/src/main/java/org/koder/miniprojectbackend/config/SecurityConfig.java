@@ -5,6 +5,7 @@ import org.koder.miniprojectbackend.filters.CookieAuthFilter;
 import org.koder.miniprojectbackend.filters.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,9 +27,10 @@ public class SecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(httpReq -> httpReq.requestMatchers("/api/v1/auth/**").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(httpReq -> httpReq.requestMatchers("/api/v1/auth/**").permitAll().requestMatchers("/hello").permitAll().requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
+                .cors(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(cookieAuthFilter, JwtFilter.class);
 

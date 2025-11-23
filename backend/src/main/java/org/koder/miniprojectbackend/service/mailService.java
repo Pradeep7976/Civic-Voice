@@ -7,6 +7,7 @@ import org.koder.miniprojectbackend.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,7 +34,8 @@ public class mailService {
         mailSender.send(mimeMessage);
     }
 
-    public boolean sendEmailOnProblemReported(Long pid, Long uid){
+    @Async
+    public void sendEmailOnProblemReported(Long pid, Long uid){
         try {
             ReportProblem reportedProblem = problemService.getReportProblemById(pid);
             User user = userService.getDetailsByUid(uid);
@@ -59,7 +61,6 @@ public class mailService {
                     imgUrl
             );
             sendHtmlEmail(mailId,MailReceivedSub,emailContent);
-            return true;
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

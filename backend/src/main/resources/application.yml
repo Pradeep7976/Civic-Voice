@@ -32,6 +32,10 @@ spring:
           starttls:
             enable: true
 
-
+imagekit:
+  privateKey:
 server:
   port: 7000
+logging:
+  level:
+    web: debug

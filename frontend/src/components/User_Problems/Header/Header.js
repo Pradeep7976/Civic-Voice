@@ -13,9 +13,9 @@ import {
 import axios from "axios";
 const Header = (props) => {
   // eslint-disable-next-line
-  const port = "https://expensive-hem-elk.cyclic.app/";
+  const port = "http://localhost:7000/";
   // eslint-disable-next-line
-  const Port = "https://expensive-hem-elk.cyclic.app/";
+  const Port = "http://localhost:7000/";
   const [details, setdetails] = useState({});
   useEffect(() => {
     axios.post(Port + "/api/user/details", { uid: props.uid }).then((resu) => {

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ProblemsMap from "./LOP_map";
 const LOP = () => {
-  const Port = "https://expensive-hem-elk.cyclic.app/";
+  const Port = "http://localhost:7000/";
   const probData = Problems;
   let navigate = useNavigate();
 
@@ -31,7 +31,9 @@ const LOP = () => {
       <Flex bg="black" pt="3" pb="3" mb="10">
         <Box>
           <center>
-            <Heading color='white' ml='3'>Choose The Problem...</Heading>
+            <Heading color="white" ml="3">
+              Choose The Problem...
+            </Heading>
           </center>
         </Box>
       </Flex>
@@ -41,11 +43,11 @@ const LOP = () => {
           <>
             <Card
               boxShadow="2xl"
-              color='white'
+              color="white"
               ml="5"
               mr="5"
               className="hovered"
-              bgGradient='linear(to-t, blue.300, blue.500)'
+              bgGradient="linear(to-t, blue.300, blue.500)"
               border="50px"
               borderColor="black.200"
               mb="10"
@@ -65,7 +67,7 @@ const LOP = () => {
               <CardBody>
                 <center>
                   <Heading>{currElem.name}</Heading>
-                  <Text color='white'>{currElem.description}</Text>
+                  <Text color="white">{currElem.description}</Text>
                 </center>
               </CardBody>
             </Card>

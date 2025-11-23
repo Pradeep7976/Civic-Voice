@@ -29,9 +29,9 @@ const Edit_Profile = () => {
   const [rating, setRating] = useState(0.0);
   const [feedback, setFeedback] = useState("");
   // eslint-disable-next-line
-  const port = "https://expensive-hem-elk.cyclic.app/";
+  const port = "http://localhost:7000/";
   // eslint-disable-next-line
-  const Port = "https://expensive-hem-elk.cyclic.app/";
+  const Port = "http://localhost:7000/";
   let navigate = useNavigate();
   function submit() {
     if (rating > 5 || rating < 0) {

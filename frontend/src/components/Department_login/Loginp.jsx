@@ -18,6 +18,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import deptMapping from "./deptMapping";
+import api from "../requestClient/axiosInstance";
 
 function Loginp() {
   const [passwordd, setpassword] = useState("");
@@ -27,9 +29,9 @@ function Loginp() {
   const [load, setload] = useState(false);
 
   // eslint-disable-next-line
-  const port = "https://expensive-hem-elk.cyclic.app/";
+  const port = "http://localhost:7000/";
   // eslint-disable-next-line
-  const Port = "https://expensive-hem-elk.cyclic.app/";
+  const Port = "http://localhost:7000";
 
   let navigate = useNavigate();
   function regestr() {
@@ -38,21 +40,23 @@ function Loginp() {
   function clicki() {
     setload(true);
     const dat = {
-      depart: depart,
+      phone: deptMapping[depart],
       password: passwordd,
     };
     console.log(dat);
-    axios
-      .post(Port + "/api/dept/login", dat)
+    api
+      .post("/auth/login", dat)
       .then((res) => {
-        if (res.data.auth) {
-          localStorage.setItem("tokendept", res.data.token);
-          localStorage.setItem("did", res.data.did);
-          navigate("/dept/" + res.data.did);
+        console.log(res);
+        if (res.data.token != null) {
+          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("uid", res.data.uid);
+          navigate("/dept/" + res.data.uid);
         }
       })
       .catch((err) => {
         alert("alert INVALID Password or phone" + err);
+        setload(false);
         navigate("/dept/login");
       });
   }

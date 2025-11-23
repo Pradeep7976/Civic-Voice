@@ -8,27 +8,24 @@ import {
   StackDivider,
   Box,
   Text,
-  Divider
+  Divider,
 } from "@chakra-ui/react";
 import { CircularProgress, CircularProgressLabel } from "@chakra-ui/react";
 import { Progress } from "@chakra-ui/react";
 import axios from "axios";
+import api from "../../requestClient/axiosInstance";
 const Progres = () => {
-  // eslint-disable-next-line
-  const port = "https://expensive-hem-elk.cyclic.app/";
-  // eslint-disable-next-line
-  const Port = "https://expensive-hem-elk.cyclic.app/";
   const [total, settotal] = useState(0);
   const [solvedcount, setsolvedcount] = useState(0);
   useEffect(() => {
-    axios.get(Port + "/api/reportprob/solvedcount").then((response) => {
-      setsolvedcount(parseInt(response.data.ans));
+    api.get("/problem/count/solved").then((response) => {
+      setsolvedcount(parseInt(response.data.count));
       console.log("Solved " + solvedcount);
     });
-    axios.get(Port + "/api/reportprob/totalcount").then((response) => {
-      if (response.data.ans != 0) settotal(response.data.ans);
+    api.get("/problem/count/total").then((response) => {
+      if (response.data.count != 0) settotal(response.data.count);
       else {
-        settotal(0);
+        settotal(1);
       }
       console.log("Total " + total);
     });
@@ -38,13 +35,13 @@ const Progres = () => {
       <Container
         h="calc(80vh)"
         borderRadius={10}
-        bgGradient='linear(to-b, blue.600, blue.400)'
+        bgGradient="linear(to-b, blue.600, blue.400)"
         pt="5"
         mt="10"
         mb="10"
       >
         <center>
-          <Heading color='white'>Our Progress</Heading>
+          <Heading color="white">Our Progress</Heading>
         </center>
         <Card boxShadow="dark-lg" borderRadius={10} mt="10" mb="10">
           <CardBody>
@@ -55,7 +52,7 @@ const Progres = () => {
                 </Heading>
                 <Divider orientation="horizontal"></Divider>
 
-                <div >
+                <div>
                   <span mt="5" mb="2">
                     Problems Reported
                   </span>
@@ -64,23 +61,21 @@ const Progres = () => {
                     mb="5"
                     colorScheme="green"
                     hasStripe
-                    
                     value={20}
                   />
                 </div>
                 <Divider orientation="horizontal"></Divider>
-                <div >
-                  <span mt="5" mb="2" >
+                <div>
+                  <span mt="5" mb="2">
                     Problems Solved
                   </span>
                   <Progress
                     colorScheme="green"
                     value={(solvedcount / total) * 100}
-                    mb='4'
+                    mb="4"
                   />
                 </div>
                 <Divider orientation="horizontal"></Divider>
-
               </Box>
             </Stack>
           </CardBody>
@@ -97,7 +92,6 @@ const Progres = () => {
                 <div>
                   <span>Problems Reported</span>
                   <CircularProgress
-                  
                     mt="5"
                     ml="10"
                     color="green.300"
@@ -115,7 +109,6 @@ const Progres = () => {
                     mt="5"
                     color="green.300"
                     ml="14"
-                    
                     value={30}
                     size="80px"
                   >
@@ -125,7 +118,6 @@ const Progres = () => {
                   </CircularProgress>
                 </div>
                 <Divider orientation="horizontal"></Divider>
-
               </Box>
             </Stack>
           </CardBody>

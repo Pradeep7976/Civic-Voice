@@ -22,7 +22,7 @@ const Thank_You = () => {
     "will work with the concerned department on resolving the issue as soon as possible";
   const text2 =
     "The issue is already addressed will work with the concerned department on \n resolving the issue as soon as possible";
-  const Port = "https://expensive-hem-elk.cyclic.app/";
+  const Port = "http://localhost:7000/";
   let navigate = useNavigate();
   useEffect(() => {
     axios

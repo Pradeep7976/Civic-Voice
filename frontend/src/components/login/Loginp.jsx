@@ -17,6 +17,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import api from "../requestClient/axiosInstance";
 function Loginp() {
   const [phone, setphone] = useState("");
   const [passwordd, setpassword] = useState("");
@@ -25,9 +26,8 @@ function Loginp() {
   const [load, setload] = useState(false);
 
   // eslint-disable-next-line
-  const port = "https://expensive-hem-elk.cyclic.app/";
   // eslint-disable-next-line
-  const Port = "https://expensive-hem-elk.cyclic.app/";
+  // const Port = "http://localhost:7000";
 
   let navigate = useNavigate();
   function regestr() {
@@ -40,10 +40,12 @@ function Loginp() {
       password: passwordd,
     };
     console.log(dat);
-    axios
-      .post(Port + "/api/user/login", dat)
+    api
+      .post("/auth/login", dat)
       .then((res) => {
-        if (res.data.auth) {
+        console.log(res);
+
+        if (res.data.token != null) {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("uid", res.data.uid);
           navigate("/");
