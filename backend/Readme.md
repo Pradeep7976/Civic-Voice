@@ -6,7 +6,7 @@ Department Login URL: [Department](http://localhost:3000/dept/login).
 
 Default User:
 
-    username: my phone
+    username: 8548848050
     passowrd: helo
 
 Default Department:

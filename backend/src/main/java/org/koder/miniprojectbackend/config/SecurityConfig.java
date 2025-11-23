@@ -27,7 +27,7 @@ public class SecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(httpReq -> httpReq.requestMatchers("/api/v1/auth/**").permitAll().requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(httpReq -> httpReq.requestMatchers("/api/v1/auth/**").permitAll().requestMatchers("/hello").permitAll().requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .cors(AbstractHttpConfigurer::disable)

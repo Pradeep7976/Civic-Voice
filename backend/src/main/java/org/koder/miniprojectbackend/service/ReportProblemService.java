@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
 import org.koder.miniprojectbackend.util.imageKitUtil;
 
@@ -47,6 +48,7 @@ public class ReportProblemService {
 
     @Transactional
     public ReportProblem saveReportedProblem(MultipartFile file, String reportProblemReqStr) {
+        RestClient.builder().build().get();
         if (file == null || reportProblemReqStr == null) {
             throw new GeneralException("no File", null);
         }
